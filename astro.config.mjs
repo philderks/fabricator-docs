@@ -4,22 +4,39 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
+	site: 'https://docs.fabricator.site',
 	integrations: [
 		starlight({
-			title: 'My Docs',
-			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
+			title: 'Fabricator',
+			customCss: ['./src/styles/custom.css'],
+			social: [
+				{ icon: 'github', label: 'GitHub', href: 'https://github.com/philderks/Fabricator' },
+			],
 			sidebar: [
+				{
+					label: 'Getting Started',
+					items: [
+						{ label: 'Introduction', slug: 'getting-started/introduction' },
+						{ label: 'Requirements', slug: 'getting-started/requirements' },
+						{ label: 'Installation', slug: 'getting-started/installation' },
+					],
+				},
 				{
 					label: 'Guides',
 					items: [
-						// Each item here is one entry in the navigation menu.
-						{ label: 'Example Guide', slug: 'guides/example' },
+						{ label: 'Managing mods', slug: 'guides/managing-mods' },
+						{ label: 'Console', slug: 'guides/console' },
+						{ label: 'Updating', slug: 'guides/updating' },
 					],
 				},
 				{
 					label: 'Reference',
-					autogenerate: { directory: 'reference' },
+					items: [
+						{ label: 'Configuration', slug: 'reference/configuration' },
+						{ label: 'CLI', slug: 'reference/cli' },
+					],
 				},
+				{ label: 'Contributing', link: '/contributing/' },
 			],
 		}),
 	],

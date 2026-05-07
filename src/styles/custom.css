@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=Syne:wght@400;500;600;700;800&display=swap');
+
+/* Dark theme (Starlight default / :root) */
+:root,
+::backdrop {
+	--sl-font: 'Syne', var(--sl-font-system);
+	--sl-font-mono: 'IBM Plex Mono', var(--sl-font-system-mono);
+
+	--sl-color-accent-low: hsl(25, 95%, 16%);
+	--sl-color-accent: #f97316;
+	--sl-color-accent-high: #fdba74;
+
+	--sl-color-bg: #0f0f0f;
+	--sl-color-bg-nav: #141414;
+	--sl-color-bg-sidebar: #141414;
+	--sl-color-bg-inline-code: #1a1a1a;
+
+	--sl-color-hairline-light: #1e1e1e;
+	--sl-color-hairline: #1e1e1e;
+	--sl-color-hairline-shade: #0a0a0a;
+}
+
+:root[data-theme='light'],
+[data-theme='light'] ::backdrop {
+	--sl-color-accent-low: hsl(25, 95%, 92%);
+	--sl-color-accent: #ea580c;
+	--sl-color-accent-high: hsl(25, 95%, 28%);
+
+	--sl-color-hairline-light: #1e1e1e;
+	--sl-color-hairline: #e5e5e5;
+	--sl-color-hairline-shade: #d4d4d4;
+
+	--sl-font: 'Syne', var(--sl-font-system);
+	--sl-font-mono: 'IBM Plex Mono', var(--sl-font-system-mono);
+}

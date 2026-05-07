@@ -1,12 +1,6 @@
 {
   "name": "Fabricator Docs",
-  "image": "mcr.microsoft.com/devcontainers/base:bookworm",
-  "features": {
-    "ghcr.io/devcontainers/features/node:1": {
-      "version": "22",
-      "nodeGypDependencies": true
-    }
-  },
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
   "forwardPorts": [4321],
   "postCreateCommand": "npm install",
   "customizations": {
