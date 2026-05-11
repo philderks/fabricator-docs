@@ -36,7 +36,7 @@ export default defineConfig({
 						{ label: 'CLI', slug: 'reference/cli' },
 					],
 				},
-				{ label: 'Contributing', link: '/contributing/' },
+				{ label: 'Contributors', slug: 'contributors' },
 			],
 		}),
 	],
