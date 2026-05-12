@@ -1,35 +1,140 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=Syne:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=JetBrains+Mono:wght@400;600&display=swap');
 
-/* Dark theme (Starlight default / :root) */
+/* ─── Fabricator Design Tokens → Starlight Variables ─── */
+
+/* Dark theme */
 :root,
 ::backdrop {
-	--sl-font: 'Syne', var(--sl-font-system);
-	--sl-font-mono: 'IBM Plex Mono', var(--sl-font-system-mono);
+	/* Fonts */
+	--sl-font: 'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	--sl-font-mono: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
 
+	/* Accent (Fabricator orange) */
 	--sl-color-accent-low: hsl(25, 95%, 16%);
 	--sl-color-accent: #f97316;
 	--sl-color-accent-high: #fdba74;
 
+	/* Backgrounds */
 	--sl-color-bg: #0f0f0f;
 	--sl-color-bg-nav: #141414;
 	--sl-color-bg-sidebar: #141414;
 	--sl-color-bg-inline-code: #1a1a1a;
 
+	/* Borders / hairlines */
 	--sl-color-hairline-light: #1e1e1e;
 	--sl-color-hairline: #1e1e1e;
 	--sl-color-hairline-shade: #0a0a0a;
+
+	/* Text */
+	--sl-color-white: #f1f1f1;
+	--sl-color-gray-1: #d4d4d4;
+	--sl-color-gray-2: #888888;
+	--sl-color-gray-3: #555555;
+	--sl-color-gray-4: #252525;
+	--sl-color-gray-5: #1a1a1a;
+	--sl-color-gray-6: #141414;
+
+	/* Status colours (used by asides) */
+	--sl-color-green: #22c55e;
+	--sl-color-orange: #fbbf24;
+	--sl-color-red: #ef4444;
 }
 
+/* Light theme overrides */
 :root[data-theme='light'],
 [data-theme='light'] ::backdrop {
 	--sl-color-accent-low: hsl(25, 95%, 92%);
 	--sl-color-accent: #ea580c;
 	--sl-color-accent-high: hsl(25, 95%, 28%);
 
-	--sl-color-hairline-light: #1e1e1e;
+	--sl-color-hairline-light: #e5e5e5;
 	--sl-color-hairline: #e5e5e5;
 	--sl-color-hairline-shade: #d4d4d4;
+}
 
-	--sl-font: 'Syne', var(--sl-font-system);
-	--sl-font-mono: 'IBM Plex Mono', var(--sl-font-system-mono);
+/* ─── Global resets (mirrors Fabricator globals) ─── */
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+body {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Fabricator-style link underlines ─── */
+
+.sl-markdown-content a:not(.not-content) {
+	color: var(--sl-color-accent);
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.sl-markdown-content a:not(.not-content):hover {
+	color: var(--sl-color-accent-high);
+}
+
+/* ─── Input / form elements (Fabricator style) ─── */
+
+input,
+textarea,
+select {
+	background: #0f0f0f;
+	border: 1px solid #1e1e1e;
+	border-radius: 8px;
+	color: #d4d4d4;
+	padding: 0.625rem 1rem;
+	font-size: 0.875rem;
+	font-family: inherit;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+	outline: none;
+	border-color: #f97316;
+}
+
+input::placeholder,
+textarea::placeholder {
+	color: #555555;
+}
+
+/* ─── Sidebar nav active item ─── */
+
+[aria-current='page'],
+[aria-current='page']:hover,
+[aria-current='page']:focus {
+	border-radius: 6px;
+}
+
+/* ─── Code blocks — Fabricator mono font + dark surface ─── */
+
+code,
+pre {
+	font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+	font-size: 0.85em;
+}
+
+/* ─── Scrollbar (Fabricator-style subtle dark) ─── */
+
+::-webkit-scrollbar {
+	width: 6px;
+	height: 6px;
+}
+
+::-webkit-scrollbar-track {
+	background: #141414;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #252525;
+	border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #f97316;
 }
