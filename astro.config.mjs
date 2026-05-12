@@ -8,35 +8,74 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'Fabricator',
-			customCss: ['./src/styles/custom.css'],
+			description: 'Self-hosted Fabric server management dashboard',
+			logo: { src: './src/assets/fabricator-favicon.svg' },
+			head: [
+				{
+					// Default to dark mode for first-time visitors who have no saved preference
+					tag: 'script',
+					content: `
+						if (!localStorage.getItem('starlight-theme')) {
+							document.documentElement.dataset.theme = 'dark';
+						}
+					`,
+				},
+			],
 			social: [
 				{ icon: 'github', label: 'GitHub', href: 'https://github.com/philderks/Fabricator' },
 			],
+			customCss: ['./src/styles/custom.css'],
 			sidebar: [
 				{
 					label: 'Getting Started',
 					items: [
-						{ label: 'Introduction', slug: 'getting-started/introduction' },
-						{ label: 'Requirements', slug: 'getting-started/requirements' },
-						{ label: 'Installation', slug: 'getting-started/installation' },
+						{ label: 'Quick Install', slug: 'getting-started/quick-install' },
+						{ label: 'System Requirements', slug: 'getting-started/requirements' },
+						{ label: 'Reverse Proxy Setup', slug: 'getting-started/reverse-proxy' },
 					],
 				},
 				{
-					label: 'Guides',
+					label: 'Using Fabricator',
 					items: [
-						{ label: 'Managing mods', slug: 'guides/managing-mods' },
-						{ label: 'Console', slug: 'guides/console' },
-						{ label: 'Updating', slug: 'guides/updating' },
+						{ label: 'Dashboard Overview', slug: 'guide/overview' },
+						{ label: 'Managing Mods', slug: 'guide/mods' },
+						{ label: 'File Manager', slug: 'guide/files' },
+						{ label: 'Console', slug: 'guide/console' },
+						{ label: 'Backups', slug: 'guide/backups' },
 					],
 				},
 				{
-					label: 'Reference',
+					label: 'CLI Reference',
 					items: [
-						{ label: 'Configuration', slug: 'reference/configuration' },
-						{ label: 'CLI', slug: 'reference/cli' },
+						{ label: 'Overview', slug: 'cli/index' },
+						{ label: 'status / start / stop', slug: 'cli/server-commands' },
+						{ label: 'mod install', slug: 'cli/mod-install' },
 					],
 				},
-				{ label: 'Contributors', slug: 'contributors' },
+				{
+					label: 'Configuration',
+					items: [
+						{ label: 'fabricator.env Reference', slug: 'config/env' },
+						{ label: 'Java Management', slug: 'config/java' },
+						{ label: 'Multi-Server Setup', slug: 'config/multi-server' },
+					],
+				},
+				{
+					label: 'Self-Hosting & Contributing',
+					items: [
+						{ label: 'Running from Source', slug: 'contributing/dev-setup' },
+						{ label: 'Architecture', slug: 'contributing/architecture' },
+						{ label: 'Contributing Guide', slug: 'contributing/contributing' },
+					],
+				},
+				{
+					label: 'Troubleshooting',
+					items: [
+						{ label: 'Common Errors', slug: 'troubleshooting/common-errors' },
+						{ label: 'Log Locations', slug: 'troubleshooting/logs' },
+						{ label: 'Reporting Bugs', slug: 'troubleshooting/reporting-bugs' },
+					],
+				},
 			],
 		}),
 	],
