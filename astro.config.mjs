@@ -29,51 +29,30 @@ export default defineConfig({
 				{
 					label: 'Getting Started',
 					items: [
-						{ label: 'Quick Install', slug: 'getting-started/quick-install' },
+						{ label: 'Introduction', slug: 'getting-started/introduction' },
+						{ label: 'Installation', slug: 'getting-started/installation' },
 						{ label: 'System Requirements', slug: 'getting-started/requirements' },
-						{ label: 'Reverse Proxy Setup', slug: 'getting-started/reverse-proxy' },
 					],
 				},
 				{
-					label: 'Using Fabricator',
+					label: 'Guides',
 					items: [
-						{ label: 'Dashboard Overview', slug: 'guide/overview' },
-						{ label: 'Managing Mods', slug: 'guide/mods' },
-						{ label: 'File Manager', slug: 'guide/files' },
-						{ label: 'Console', slug: 'guide/console' },
-						{ label: 'Backups', slug: 'guide/backups' },
+						{ label: 'Managing Mods', slug: 'guides/managing-mods' },
+						{ label: 'Console', slug: 'guides/console' },
+						{ label: 'Updating', slug: 'guides/updating' },
 					],
 				},
 				{
-					label: 'CLI Reference',
+					label: 'Reference',
 					items: [
-						{ label: 'Overview', slug: 'cli/index' },
-						{ label: 'status / start / stop', slug: 'cli/server-commands' },
-						{ label: 'mod install', slug: 'cli/mod-install' },
+						{ label: 'CLI Reference', slug: 'reference/cli' },
+						{ label: 'Configuration', slug: 'reference/configuration' },
 					],
 				},
 				{
-					label: 'Configuration',
+					label: 'Contributing',
 					items: [
-						{ label: 'fabricator.env Reference', slug: 'config/env' },
-						{ label: 'Java Management', slug: 'config/java' },
-						{ label: 'Multi-Server Setup', slug: 'config/multi-server' },
-					],
-				},
-				{
-					label: 'Self-Hosting & Contributing',
-					items: [
-						{ label: 'Running from Source', slug: 'contributing/dev-setup' },
-						{ label: 'Architecture', slug: 'contributing/architecture' },
-						{ label: 'Contributing Guide', slug: 'contributing/contributing' },
-					],
-				},
-				{
-					label: 'Troubleshooting',
-					items: [
-						{ label: 'Common Errors', slug: 'troubleshooting/common-errors' },
-						{ label: 'Log Locations', slug: 'troubleshooting/logs' },
-						{ label: 'Reporting Bugs', slug: 'troubleshooting/reporting-bugs' },
+						{ label: 'Contributing Guide', slug: 'contributors' },
 					],
 				},
 			],
