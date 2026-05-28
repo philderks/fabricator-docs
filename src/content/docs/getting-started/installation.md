@@ -1,102 +1,102 @@
 ---
 title: Installation
-description: Install Fabricator on a Linux server using the one-line installer.
+description: Install Fabricator on a Linux server using the release installer.
 ---
 
-Fabricator installs via a single bash script. The installer handles dependencies, creates a system service, and sets up the directory structure.
+Fabricator installs from GitHub release tarballs. The installer creates the service user, data directories, Python virtualenv, CLI entry point, config file, systemd unit, and self-update sudoers drop-in.
 
-## Requirements
-
-- Linux (Debian/Ubuntu, Arch, Fedora/RHEL)
-- `curl` or `wget`
-- Root or sudo access
-
-See [Requirements](/getting-started/requirements) for the full list including Java and port details.
-
-## Install
+## Install latest release
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/philderks/Fabricator/main/tools/install.sh | sudo bash
+curl -fsSL https://fabricator.site/install.sh | bash
 ```
 
-The installer will:
+The script requires root privileges. If you run it as a non-root user, it uses `sudo`.
 
-1. Detect your package manager and install system dependencies
-2. Install Node.js 20.x via NodeSource
-3. Create the `fabricator` service user
-4. Deploy the app to `/opt/fabricator/app`
-5. Write default config to `/etc/fabricator/fabricator.env`
-6. Enable and start `fabricator.service`
+## Install a specific version
 
-When it's done, Fabricator is running at `http://localhost:5000`.
+```bash
+curl -fsSL https://fabricator.site/install.sh | FABRICATOR_VERSION=vX.Y.Z bash
+```
 
-## Upgrading
+`FABRICATOR_VERSION=main` is intentionally not supported by the installer. Use a release tag.
 
-Run the same install command again. The installer detects an existing installation and upgrades in place. It stops the service, syncs the new files, then restarts.
+## What the installer does
+
+1. Detects the Linux distro family.
+2. Installs host packages such as Python, curl, tar, rsync, CA certificates, grep, and sed.
+3. Ensures the `fabricator` system user exists.
+4. Downloads `fabricator-<tag>.tar.gz` from GitHub Releases.
+5. Syncs app files into `/opt/fabricator/app`.
+6. Creates or updates `/opt/fabricator/venv` and installs Python requirements.
+7. Installs the `fabricator` CLI entry point and symlinks it to `/usr/local/bin/fabricator`.
+8. Creates `/etc/fabricator/fabricator.env` if it does not exist.
+9. Writes `/etc/systemd/system/fabricator.service`.
+10. Grants the service user passwordless sudo for the bundled update wrapper only.
+11. Enables and starts `fabricator.service`.
+
+## Update an existing install
+
+Run the installer again or pass `--update` explicitly:
+
+```bash
+curl -fsSL https://fabricator.site/install.sh | bash -s -- --update
+```
+
+During update, Fabricator backs up important state under `/var/lib/fabricator/update-backups/<timestamp>/`, including `servers.json` and `fabricator.env` when present.
 
 ## Directory layout
 
 | Path | Purpose |
-|------|---------|
-| `/opt/fabricator/app` | Application files (root:root, 755) |
-| `/var/lib/fabricator` | Server data, Java runtimes, backups |
-| `/etc/fabricator/fabricator.env` | Configuration (root:fabricator, 0640) |
-| `/etc/systemd/system/fabricator.service` | Systemd unit |
-| `/opt/fabricator/app/.fabricator_version` | Installed version marker |
+| --- | --- |
+| `/opt/fabricator/app` | Application code synced from the release archive. |
+| `/opt/fabricator/venv` | Python virtualenv used by the service and CLI. |
+| `/opt/fabricator/app/.fabricator_version` | Installed release marker. |
+| `/var/lib/fabricator` | Mutable data root. |
+| `/var/lib/fabricator/servers` | Default server install root in production. |
+| `/var/lib/fabricator/servers.json` | Server index. |
+| `/var/lib/fabricator/java` | Managed Java runtimes. |
+| `/var/lib/fabricator/backups` | Default backup root. |
+| `/etc/fabricator/fabricator.env` | Environment configuration loaded by systemd. |
+| `/etc/systemd/system/fabricator.service` | Systemd unit. |
+| `/etc/sudoers.d/fabricator-self-update` | Limited sudo rule for dashboard self-update. |
 
 ## Service management
 
 ```bash
-# Status
 sudo systemctl status fabricator
-
-# Stop / start / restart
-sudo systemctl stop fabricator
-sudo systemctl start fabricator
 sudo systemctl restart fabricator
-
-# Logs
 sudo journalctl -u fabricator -f
 ```
 
-## Accessing the UI
-
-By default, Fabricator only listens on `localhost:5000`. It won't be reachable from outside the server without a reverse proxy.
-
-If you're running Fabricator on a remote server, set up a reverse proxy. Example with nginx:
-
-```nginx
-server {
-    listen 80;
-    server_name fabricator.example.com;
-
-    location / {
-        proxy_pass http://127.0.0.1:5000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-    }
-}
-```
-
-Then add TLS with Certbot or Cloudflare. See the [reverse proxy guide](/guides/reverse-proxy) for more options.
-
-## Uninstalling
-
-There's no automated uninstaller yet. To remove Fabricator manually:
+You can also use the CLI:
 
 ```bash
-sudo systemctl stop fabricator
-sudo systemctl disable fabricator
-sudo rm -rf /opt/fabricator /etc/fabricator /etc/systemd/system/fabricator.service
-sudo userdel fabricator
-sudo systemctl daemon-reload
+fabricator status
+fabricator version
+fabricator update
 ```
 
-Server data lives in `/var/lib/fabricator`. Remove that directory too if you don't need it:
+## Accessing the dashboard
+
+After install, the script prints the URL it detected. The default packaged config is:
+
+```ini
+HOST=0.0.0.0
+PORT=5000
+FLASK_ENV=production
+SERVER_ROOT=/var/lib/fabricator/servers
+SERVER_INDEX_FILE=/var/lib/fabricator/servers.json
+```
+
+Open `http://<host-ip>:5000/`, then place Fabricator behind a reverse proxy before exposing it broadly.
+
+## Uninstall
+
+Use the installed CLI:
 
 ```bash
-sudo rm -rf /var/lib/fabricator
+sudo fabricator uninstall
 ```
+
+The command asks you to type `yes` and then removes the service, app files, data directory, config directory, service user, and systemd unit. It is destructive.

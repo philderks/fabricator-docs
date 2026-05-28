@@ -3,130 +3,123 @@ title: CLI
 description: Command-line interface reference for Fabricator.
 ---
 
-The Fabricator CLI is a small [Click](https://click.palletsprojects.com/) program for **system-level** service management on a typical Linux install: it drives `systemctl`, reads the installed version marker, talks to the local HTTP API, and runs the bundled update script.
+The Fabricator CLI is a small [Click](https://click.palletsprojects.com/) program for **system-level** service management on a standard Linux install. It drives `systemctl`, reads the installed version marker, talks to the local HTTP API for status, runs the bundled update script, and can remove an installation.
 
-Source code lives in the main repo: [`tools/cli.py` on the `dev` branch](https://github.com/philderks/Fabricator/blob/dev/tools/cli.py).
+Source code lives in the main repo: [`tools/cli.py`](https://github.com/philderks/Fabricator/blob/main/tools/cli.py).
 
 ## Prerequisites
 
 Commands assume a standard deployment where:
 
 - Fabricator runs as the `fabricator` systemd service.
-- The app lives under `/opt/fabricator/app` (see `INSTALL_DIR` and `APP_DIR` in the source).
-- The local API is reachable at `http://localhost:5000` (`API_BASE`).
-- Dependencies used by the script include **Click**, **requests**, and a working **`systemctl`**.
-
-Invoke the CLI the way your install provides it—for example directly with Python against the deployed path (`/opt/fabricator/app/tools/cli.py`), or via a symlink or package entry point if your installer adds one.
-
-## Global behavior
-
-- Many subcommands print colored text to the terminal (green for success, red for failure, yellow for warnings).
-- Non-zero exits are used when a required operation fails (for example `systemctl` errors or a failed update).
+- The app lives under `/opt/fabricator/app`.
+- The virtualenv lives under `/opt/fabricator/venv`.
+- The local API is reachable at `http://localhost:5000`.
+- `/usr/local/bin/fabricator` points to the CLI entry point installed by `pip install -e /opt/fabricator/app`.
 
 ## Commands
 
-### `start`
+### `fabricator start`
 
-Starts the Fabricator service with `systemctl start fabricator`.
+Runs `systemctl start fabricator`.
 
-- **On success:** prints a success message and exits `0`.
-- **On failure:** prints an error and exits with the `systemctl` return code.
+- Success: prints a green success message and exits `0`.
+- Failure: prints a red error and exits with the `systemctl` return code.
 
-### `stop`
+### `fabricator stop`
 
-Attempts a **graceful** API shutdown, then stops the service.
+Runs `systemctl stop fabricator`.
 
-1. Sends `POST http://localhost:5000/api/stop` with a 10 second timeout. Network or HTTP errors are ignored so shutdown can still proceed.
-2. Runs `systemctl stop fabricator`.
+The command does not call a Flask shutdown endpoint; it delegates service shutdown to systemd.
 
-Exits `0` on successful stop, otherwise exits with `systemctl`’s return code.
+### `fabricator update`
 
-### `update`
+Updates Fabricator to the latest GitHub release.
 
-Updates Fabricator to the **latest GitHub release** tag.
+1. Reads `/opt/fabricator/app/.fabricator_version` when present.
+2. Fetches `https://api.github.com/repos/philderks/Fabricator/releases/latest`.
+3. If already up to date, exits successfully.
+4. Otherwise runs `bash /opt/fabricator/app/tools/install.sh --update` with `FABRICATOR_VERSION` set to the latest tag.
 
-1. Reads the current version from `/opt/fabricator/app/.fabricator_version` (if present).
-2. Fetches `https://api.github.com/repos/philderks/Fabricator/releases/latest` and uses the `tag_name` as the target version.
-3. If the version cannot be fetched, prints an error and exits `1`.
-4. If the local version already equals the latest tag, prints that you are up to date and exits `0`.
-5. Otherwise runs `bash /opt/fabricator/app/tools/install.sh --update` with `FABRICATOR_VERSION` set to the latest tag in the process environment.
+### `fabricator status`
 
-Exits with the install script’s return code on failure.
+Shows systemd state and local Flask/API reachability.
 
-### `status`
-
-Shows **systemd** state and whether the **Flask** app responds on the local API.
-
-**Options**
+Options:
 
 | Option | Description |
-|--------|-------------|
-| `--json` | Print a single JSON object instead of the human-readable summary. |
+| --- | --- |
+| `--json` | Print a JSON object instead of formatted text. |
 
-**Plain output**
+Human output includes:
 
-- **Service:** `systemctl is-active fabricator` result (green if `active`, red otherwise).
-- **Flask:** `up` or `down` based on whether `GET http://localhost:5000/api/status` succeeds within 5 seconds.
-- If the JSON body of `/api/status` includes any of `players`, `tps`, or `uptime`, those keys are printed indented under Flask.
-- If Flask is up but none of those keys are present, it prints the HTTP status code and notes that no Minecraft data was available.
+- `Service`: result of `systemctl is-active fabricator`.
+- `Flask`: whether `GET http://localhost:5000/api/status` responds within five seconds.
+- Optional Minecraft-ish keys (`players`, `tps`, `uptime`) when the API response includes them.
 
-**JSON shape** (approximate)
+JSON shape:
 
 ```json
 {
   "systemd_state": "active",
   "flask_up": true,
   "api_status_code": 200,
-  "api_body": { }
+  "api_body": {}
 }
 ```
 
-`api_body` may be `null` if the response was not valid JSON.
+### `fabricator version`
 
-### `version`
+Prints the installed Fabricator release tag from `/opt/fabricator/app/.fabricator_version`.
 
-Prints the installed Fabricator version from `/opt/fabricator/app/.fabricator_version`.
-
-**Options**
+Options:
 
 | Option | Description |
-|--------|-------------|
-| `--json` | Print `{"version": "<tag or null>"}`. |
+| --- | --- |
+| `--json` | Print `{ "version": "<tag or null>" }`. |
 
-If the file is missing or unreadable, the human-readable mode prints a yellow warning with the expected path.
+### `fabricator uninstall`
 
-### `uninstall`
+Destructively removes Fabricator. It prompts for `yes` before proceeding.
 
-Removes Fabricator and related system state. This is **destructive**.
+The command attempts, in order:
 
-1. Prompts: `This will remove Fabricator and all its data. Type 'yes' to continue`
-2. Only proceeds if the answer (trimmed, case-insensitive) is exactly `yes`.
-3. In order, attempts: stop service, disable service, remove `/opt/fabricator`, remove `/var/lib/fabricator`, remove `/etc/fabricator`, remove user `fabricator`, remove `/etc/systemd/system/fabricator.service`, `systemctl daemon-reload`.
+1. Stop the service.
+2. Disable the service.
+3. Remove `/opt/fabricator`.
+4. Remove `/var/lib/fabricator`.
+5. Remove `/etc/fabricator`.
+6. Remove the `fabricator` service user.
+7. Remove the systemd unit.
+8. Run `systemctl daemon-reload`.
 
-Individual steps use `subprocess.run` with failures reported as warnings (yellow) rather than aborting the whole sequence.
+Individual removal steps report warnings rather than aborting the whole sequence.
 
-### `help`
+### `fabricator help`
 
-Lists every registered subcommand name and its short description (from Click).
+Lists every registered subcommand and short description.
 
-**Options**
+Options:
 
 | Option | Description |
-|--------|-------------|
-| `--json` | Print a JSON array of objects with `command` and `description` keys, sorted by command name. |
+| --- | --- |
+| `--json` | Print a JSON array of `{ "command", "description" }` objects. |
 
-Note: Avoid confusion with `--help` on the top-level Click program (`<command> --help` shows Click’s built-in help for that command).
+Use Click's built-in help for command-specific flags:
 
-## Summary table
+```bash
+fabricator status --help
+fabricator update --help
+```
+
+## Summary
 
 | Command | Purpose |
-|---------|---------|
-| `start` | Start the systemd service |
-| `stop` | POST `/api/stop`, then stop the systemd service |
-| `update` | Bump to latest release via `install.sh --update` |
-| `status` | Systemd + local API health (optional `--json`) |
-| `version` | Read version file (optional `--json`) |
-| `uninstall` | Interactive full removal |
-| `help` | List commands (optional `--json`) |
-
-For implementation details and future changes, always refer to [`cli.py`](https://github.com/philderks/Fabricator/blob/dev/tools/cli.py) in the Fabricator repository.
+| --- | --- |
+| `start` | Start the systemd service. |
+| `stop` | Stop the systemd service. |
+| `update` | Update to latest GitHub release via installer update mode. |
+| `status` | Show service/API health, optionally as JSON. |
+| `version` | Read installed release marker, optionally as JSON. |
+| `uninstall` | Interactive destructive removal. |
+| `help` | List commands, optionally as JSON. |

@@ -3,42 +3,48 @@ title: Introduction
 description: What Fabricator is, what it does, and when to use it.
 ---
 
-Fabricator is a self-hosted web dashboard for managing Minecraft servers. Today it focuses on the Fabric loader; support for additional mod loaders is planned. It runs on your Linux server and gives you a browser-based interface for starting and stopping the server, watching the console, installing mods, and managing files.
+Fabricator is a self-hosted dashboard for Minecraft server operators. It runs as a Linux systemd service and provides a browser UI for creating, starting, stopping, configuring, backing up, and maintaining multiple Minecraft server instances.
 
-## What it does
+The current codebase supports these loaders through a shared installer registry:
 
-- **Server control** — start, stop, and restart your Minecraft server from the UI or CLI
-- **Live console** — view logs in real time, run commands without SSH
-- **Mod management** — search Modrinth and install mods with one click, no manual file transfers
-- **File browser** — navigate and edit server files through the browser
-- **Multi-server support** — manage multiple Minecraft servers from a single Fabricator instance
+- Fabric
+- Forge
+- NeoForge
+- Quilt
+- Vanilla
 
-## What it doesn't do
+Mod and modpack discovery uses the [Modrinth API](https://docs.modrinth.com/). Java can be installed and selected by Fabricator per server, so you do not need to install a global Java runtime before creating a server.
 
-Fabricator is self-hosted only. There's no cloud version.
+## Core features
+
+- **Multi-server dashboard** — switch between any server stored in Fabricator's server index.
+- **Server lifecycle** — install, start, stop, restart, and inspect runtime state.
+- **Console** — read recent stdout/stderr and send commands to a running server.
+- **Modrinth integration** — search mods and modpacks, resolve compatible versions, install dependencies, and remove installed JARs.
+- **Players** — view known/online players and manage whitelist, ops, bans, IP bans, and kicks.
+- **Files** — browse server files and edit UTF-8 text files while staying inside the configured server root.
+- **Backups** — create quick backups, define scheduled backup configs, download snapshots, and restore them.
+- **Settings** — edit common `server.properties` values from the UI; advanced settings are available in expert mode.
+- **Self-update** — check GitHub Releases and trigger an in-dashboard update.
+- **CLI** — system-level commands for status, start, stop, update, version, uninstall, and help.
 
 ## How it works
 
-Fabricator runs as a systemd service on your server. The backend is Python/Flask. The frontend is Vue 3, served by Flask in production. The installer sets everything up: dependencies, service user, systemd unit, and config.
+Fabricator has three main parts:
 
-Java is managed by Fabricator itself — downloaded from Adoptium and stored under `/var/lib/fabricator/java/`. You don't need Java pre-installed.
+1. **Backend:** Python/Flask blueprints under `backend/` expose the HTTP API and coordinate installers, processes, backups, player files, and update checks.
+2. **Frontend:** Vue 3 + Vite under `frontend/` renders the dashboard and calls the API.
+3. **System integration:** `tools/install.sh`, `tools/update.sh`, the systemd unit, and the `fabricator` CLI manage deployment and service lifecycle.
 
-Mod installs go through the [Modrinth API](https://docs.modrinth.com), which is free and requires no account or API key.
+A production install stores application files in `/opt/fabricator/app`, virtualenv files in `/opt/fabricator/venv`, mutable data under `/var/lib/fabricator`, and environment configuration in `/etc/fabricator/fabricator.env`.
 
-## When to use Fabricator
+## When Fabricator is a good fit
 
-Fabricator is a good fit if you:
+Use Fabricator if you:
 
-- Run a modded Minecraft server on a Linux VPS or home server
-- Want a UI instead of managing everything over SSH
-- Want one-click mod installs from Modrinth without uploading files manually
+- Run Minecraft servers on a VPS, dedicated Linux box, or home server.
+- Prefer a web UI over routine SSH file edits.
+- Want Modrinth search/install and server backups in one tool.
+- Need to manage several server instances from one dashboard.
 
-It's not a good fit if you:
-
-- Need a loader Fabricator does not support yet (check docs and the project roadmap)
-- Are on a shared hosting plan without root access (the installer requires sudo)
-- Want a managed hosting service — Fabricator is infrastructure you run yourself
-
-## Project status
-
-Fabricator is open source under [github.com/philderks/Fabricator](https://github.com/philderks/Fabricator). It's pre-1.0 and under active development. The API and config format may change between minor versions.
+Fabricator is not a managed hosting service. You remain responsible for the host, firewall, reverse proxy, backups outside the machine, and Minecraft server resource sizing.

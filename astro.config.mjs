@@ -8,7 +8,7 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'Fabricator',
-			description: 'Self-hosted Fabric server management dashboard',
+			description: 'Self-hosted Minecraft server management dashboard',
 			logo: { src: './src/assets/fabricator-favicon.svg' },
 			head: [
 				{
@@ -32,26 +32,50 @@ export default defineConfig({
 						{ label: 'Introduction', slug: 'getting-started/introduction' },
 						{ label: 'Installation', slug: 'getting-started/installation' },
 						{ label: 'System Requirements', slug: 'getting-started/requirements' },
+						{ label: 'Reverse Proxy', slug: 'getting-started/reverse-proxy' },
 					],
 				},
 				{
 					label: 'Guides',
 					items: [
-						{ label: 'Managing Mods', slug: 'guides/managing-mods' },
+						{ label: 'Dashboard Overview', slug: 'guides/dashboard-overview' },
 						{ label: 'Console', slug: 'guides/console' },
+						{ label: 'Players', slug: 'guides/players' },
+						{ label: 'Managing Mods and Modpacks', slug: 'guides/managing-mods' },
+						{ label: 'File Manager', slug: 'guides/files' },
+						{ label: 'Backups and Restore', slug: 'guides/backups' },
+						{ label: 'Server Settings', slug: 'guides/server-settings' },
 						{ label: 'Updating', slug: 'guides/updating' },
+					],
+				},
+				{
+					label: 'Configuration',
+					items: [
+						{ label: 'Environment', slug: 'reference/configuration' },
+						{ label: 'Java Management', slug: 'config/java' },
+						{ label: 'Multi-Server Setup', slug: 'config/multi-server' },
 					],
 				},
 				{
 					label: 'Reference',
 					items: [
 						{ label: 'CLI Reference', slug: 'reference/cli' },
-						{ label: 'Configuration', slug: 'reference/configuration' },
+						{ label: 'HTTP API Overview', slug: 'reference/http-api' },
+					],
+				},
+				{
+					label: 'Troubleshooting',
+					items: [
+						{ label: 'Common Errors', slug: 'troubleshooting/common-errors' },
+						{ label: 'Log Locations', slug: 'troubleshooting/logs' },
+						{ label: 'Reporting Bugs', slug: 'troubleshooting/reporting-bugs' },
 					],
 				},
 				{
 					label: 'Contributing',
 					items: [
+						{ label: 'Architecture', slug: 'contributing/architecture' },
+						{ label: 'Development Setup', slug: 'contributing/dev-setup' },
 						{ label: 'Contributing Guide', slug: 'contributors' },
 					],
 				},
