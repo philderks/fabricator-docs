@@ -5,54 +5,55 @@ description: What you need before installing Fabricator.
 
 ## Operating system
 
-Fabricator runs on Linux. The installer supports:
+Fabricator is Linux-first and the installer requires **systemd**. The supported installer families are:
 
-| Distro family | Package manager |
-|---------------|----------------|
-| Debian / Ubuntu | apt |
-| Arch Linux | pacman |
-| Fedora / RHEL | dnf |
+| Distro family | Package manager | Examples |
+| --- | --- | --- |
+| Debian / Ubuntu | `apt` | Debian, Ubuntu, Raspbian, Pop!_OS, Linux Mint |
+| Arch | `pacman` | Arch, EndeavourOS, Garuda, Manjaro |
+| Fedora / RHEL | `dnf` | Fedora, RHEL, CentOS, Rocky, AlmaLinux |
 
-Other distros may work but are untested.
+Other distros may work manually, but the official installer exits on unknown families.
 
-## System requirements
+## Host access
 
-| | Minimum |
-|-|---------|
-| RAM | 1 GB (plus whatever your Minecraft server needs) |
-| Disk | 2 GB free (more depending on mods and world saves) |
-| CPU | Any 64-bit x86 |
+You need:
 
-Fabricator itself is lightweight. The limiting factor is the Minecraft server process it manages.
+- Root or `sudo` access.
+- `curl` and `systemctl` available before running the installer.
+- Outbound HTTPS access to GitHub Releases, PyPI, Modrinth, and Adoptium.
 
-## Access
+The installer creates a system user named `fabricator`, a systemd unit, `/etc/fabricator/fabricator.env`, and `/var/lib/fabricator`.
 
-- Root or `sudo` access — required by the installer
-- A user account with SSH access to the server
+## Runtime requirements
 
-## Network
+| Component | Requirement |
+| --- | --- |
+| Python | Python 3.10+ at minimum; the package metadata targets Python 3.11+. |
+| Node.js | Not required at runtime for release tarballs; required for frontend builds from source. |
+| Java | Managed per server by Fabricator. A global Java install is optional. |
+| RAM | Fabricator itself is lightweight; size the host for your Minecraft servers. |
+| Disk | Plan for worlds, mods, backups, and managed Java runtimes under `/var/lib/fabricator`. |
 
-Fabricator listens on `localhost:5000` by default. To access it remotely you'll need one of:
+## Java compatibility rules
 
-- A reverse proxy (nginx, Caddy, Traefik) — recommended
-- Changing the bind address in config — not recommended for public-facing servers
+Fabricator maps Minecraft versions to Java requirements before install/start:
 
-Outbound internet access is required for:
+| Minecraft version | Java |
+| --- | --- |
+| `<= 1.16.5` | 8 |
+| `1.17.x` | 16 |
+| `1.18.x` through `1.20.4` | 17 |
+| `1.20.5` through `1.21.x` | 21 |
+| year-based `24.x+` and configured future `1.26+` | 25 |
+| unmapped `1.22.x` through `1.25.x` | not enforced; Fabricator shows a warning |
 
-- Downloading Node.js during install
-- Downloading Java from Adoptium
-- Modrinth API calls for mod search and install
+Set `FABRICATOR_SKIP_JAVA_CHECK=1` only for local development/testing. Do not use it in production: servers may fail at runtime with the wrong JVM.
 
-## Java
+## Network ports
 
-You don't need Java installed beforehand. Fabricator downloads the appropriate JDK from [Adoptium](https://adoptium.net) and manages it internally under `/var/lib/fabricator/java/{major}/`. The correct version is selected based on the Minecraft version you're running.
+- Fabricator dashboard/API: `PORT` from `/etc/fabricator/fabricator.env` (default `5000`).
+- Minecraft server: per-server `server-port` (default `25565`).
+- Optional Minecraft query/RCON: per-server settings when enabled.
 
-## Software installed by the installer
-
-The install script handles these automatically:
-
-- Node.js 20.x (via NodeSource)
-- Python 3 and pip packages (via virtualenv)
-- System packages: `curl`, `git`, `rsync`, and others depending on distro
-
-You don't need to install any of these manually before running the installer.
+The packaged installer writes `HOST=0.0.0.0` by default so the dashboard binds all interfaces. If the host is reachable from untrusted networks, put Fabricator behind a firewall and reverse proxy.
