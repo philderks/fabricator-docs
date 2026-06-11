@@ -55,5 +55,6 @@ Set `FABRICATOR_SKIP_JAVA_CHECK=1` only for local development/testing. Do not us
 - Fabricator dashboard/API: `PORT` from `/etc/fabricator/fabricator.env` (default `5000`).
 - Minecraft server: per-server `server-port` (default `25565`).
 - Optional Minecraft query/RCON: per-server settings when enabled.
+- Optional playit.gg tunnels: outbound HTTPS to playit.gg/API endpoints. No inbound Minecraft port-forward is required for servers exposed through playit.gg.
 
-The packaged installer writes `HOST=0.0.0.0` by default so the dashboard binds all interfaces. If the host is reachable from untrusted networks, put Fabricator behind a firewall and reverse proxy.
+The packaged installer writes `HOST=0.0.0.0` by default so the dashboard binds all interfaces. If the host is reachable from untrusted networks, put Fabricator behind a firewall and reverse proxy. playit.gg can expose Minecraft server ports, but it does not protect the Fabricator dashboard itself.

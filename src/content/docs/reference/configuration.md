@@ -16,6 +16,8 @@ PORT=5000
 FLASK_ENV=production
 SERVER_ROOT=/var/lib/fabricator/servers
 SERVER_INDEX_FILE=/var/lib/fabricator/servers.json
+PLAYIT_ENABLED=false
+PLAYIT_BINARY_VERIFIED=true
 ```
 
 Restart the service after editing:
@@ -36,6 +38,9 @@ sudo systemctl restart fabricator
 | `JAVA_ROOT` | production: `/var/lib/fabricator/java`; development: app data `java/` | Directory for managed Java runtimes. |
 | `BACKUPS_DIR` | production: `/var/lib/fabricator/backups`; development: app data `backups/` | Default backup directory. |
 | `CORS_ORIGINS` | `http://localhost:3000` | Comma-separated list of allowed browser origins for separate frontends. Wildcard `*` is rejected. |
+| `PLAYIT_ENABLED` | `false` | Starts the shared playit.gg tunnel agent automatically when no dashboard-persisted state file exists. Prefer the dashboard toggle for normal use. |
+| `PLAYIT_BINARY_VERIFIED` | installer-managed | Whether the installer/update verified the pinned playit binaries. The UI surfaces a non-blocking warning when false. |
+| `PLAYIT_RUNTIME_DIR` | production: `/var/lib/fabricator/playit`; development: app data `playit/` | Runtime directory for the playit secret, socket, PID file, logs, and enabled-state marker. Usually only changed for development/manual installs. |
 | `FABRICATOR_SKIP_JAVA_CHECK` | unset / false | Development escape hatch to bypass Java version enforcement. Do not enable in production. |
 | `FABRICATOR_VERSION` | `latest` in installer | Installer target release tag. |
 | `FABRICATOR_REPO` | `philderks/Fabricator` | Installer repository override. |
@@ -50,6 +55,14 @@ CORS_ORIGINS=http://localhost:3000,https://dashboard.example.com
 ```
 
 `CORS_ORIGINS=*` is rejected because Fabricator exposes destructive endpoints such as start/stop, file writes, mod deletes, backups, and uninstall/update workflows.
+
+## playit.gg runtime
+
+The packaged installer creates `/var/lib/fabricator/playit` for the `fabricator` service user and installs pinned `playit`/`playit-cli` binaries into `/usr/local/bin` when the host architecture is supported.
+
+In production, the playit runtime directory stores the account secret, daemon socket, PID file, log file, and dashboard-persisted enabled state. Treat this directory as sensitive because the saved secret can authenticate the playit agent.
+
+Use the [playit.gg tunnels guide](/guides/playit/) for dashboard setup and tunnel troubleshooting.
 
 ## Server root safety
 

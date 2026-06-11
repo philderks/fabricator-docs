@@ -44,6 +44,7 @@ export default defineConfig({
 						{ label: 'Managing Mods and Modpacks', slug: 'guides/managing-mods' },
 						{ label: 'File Manager', slug: 'guides/files' },
 						{ label: 'Backups and Restore', slug: 'guides/backups' },
+						{ label: 'playit.gg Tunnels', slug: 'guides/playit' },
 						{ label: 'Server Settings', slug: 'guides/server-settings' },
 						{ label: 'Updating', slug: 'guides/updating' },
 					],

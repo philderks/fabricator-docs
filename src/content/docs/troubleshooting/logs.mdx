@@ -22,6 +22,15 @@ Use the **Console** page for recent stdout/stderr from a running managed server.
 
 Minecraft also writes logs inside each server's install directory, usually under `logs/`. Use the **Files** page or SSH to inspect older log files.
 
+## playit.gg agent logs
+
+The playit daemon writes a runtime log at `/var/lib/fabricator/playit/playitd.log` in packaged installs. Fabricator also reports lifecycle and claim errors in the service journal:
+
+```bash
+sudo journalctl -u fabricator -f
+sudo tail -f /var/lib/fabricator/playit/playitd.log
+```
+
 ## Update logs
 
 Dashboard self-update runs through the bundled update wrapper. Check both the UI update status and `journalctl -u fabricator` when diagnosing failures.

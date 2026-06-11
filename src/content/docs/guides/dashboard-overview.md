@@ -21,6 +21,7 @@ A server record includes identity, loader, Minecraft version, install path, memo
 | Mods | Installed JARs, Modrinth mod search, modpack import, and bulk delete. Hidden for Vanilla servers. |
 | Files | Browse directories and edit UTF-8 text files inside the server install path. |
 | Backups | Snapshot list, scheduled backup configs, quick backups, restore, and download. |
+| playit.gg | Shared tunnel-agent controls and this server's public address, matched by Minecraft port. |
 | Settings | Basic and expert `server.properties` editor. |
 
 ## Runtime state
