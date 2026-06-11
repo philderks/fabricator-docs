@@ -29,6 +29,15 @@ Each server needs a unique Minecraft port. Edit or recreate the server with a fr
 
 Fabricator serializes mutating operations per server. Wait for install, backup, restore, start, stop, settings save, or file write jobs to finish before starting another operation.
 
+## playit.gg agent failed
+
+Open **Server → playit.gg** and read the displayed error. Common fixes:
+
+- Rerun the installer if `playit` or `playit-cli` is missing.
+- Use **Reset** if the saved playit secret was revoked or you want to claim a different account.
+- Remove unused agents in the playit.gg dashboard if the account is at its free-agent limit.
+- Create a playit tunnel whose local port matches the server's Minecraft port when the agent is running but no public address appears.
+
 ## Modpack fails to start
 
 1. Stop the server.

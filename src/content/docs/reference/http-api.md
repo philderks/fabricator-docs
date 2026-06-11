@@ -13,6 +13,15 @@ Fabricator's dashboard talks to a Flask API mounted under `/api`. This page is a
 | `GET` | `/api/update/status` | Current installed/latest Fabricator release status and update progress. |
 | `POST` | `/api/update` | Trigger dashboard self-update. |
 
+## playit.gg
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| `GET` | `/api/playit/status` | Return shared tunnel-agent status, claim URL, verification flag, and known playit tunnels. |
+| `POST` | `/api/playit/start` | Start the shared playit agent or begin the claim flow. |
+| `POST` | `/api/playit/stop` | Stop the shared playit agent and persist the disabled state. |
+| `POST` | `/api/playit/reset` | Stop the shared agent and delete the saved playit secret so the next start requires a fresh claim. |
+
 ## Servers
 
 | Method | Path | Purpose |

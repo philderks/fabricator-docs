@@ -26,14 +26,15 @@ curl -fsSL https://fabricator.site/install.sh | FABRICATOR_VERSION=vX.Y.Z bash
 1. Detects the Linux distro family.
 2. Installs host packages such as Python, curl, tar, rsync, CA certificates, grep, and sed.
 3. Ensures the `fabricator` system user exists.
-4. Downloads `fabricator-<tag>.tar.gz` from GitHub Releases.
-5. Syncs app files into `/opt/fabricator/app`.
-6. Creates or updates `/opt/fabricator/venv` and installs Python requirements.
-7. Installs the `fabricator` CLI entry point and symlinks it to `/usr/local/bin/fabricator`.
-8. Creates `/etc/fabricator/fabricator.env` if it does not exist.
-9. Writes `/etc/systemd/system/fabricator.service`.
-10. Grants the service user passwordless sudo for the bundled update wrapper only.
-11. Enables and starts `fabricator.service`.
+4. Downloads pinned `playit` and `playit-cli` binaries for supported Linux architectures and verifies their sha256 checksums.
+5. Downloads `fabricator-<tag>.tar.gz` from GitHub Releases.
+6. Syncs app files into `/opt/fabricator/app`.
+7. Creates or updates `/opt/fabricator/venv` and installs Python requirements.
+8. Installs the `fabricator` CLI entry point and symlinks it to `/usr/local/bin/fabricator`.
+9. Creates `/etc/fabricator/fabricator.env` if it does not exist.
+10. Writes `/etc/systemd/system/fabricator.service`.
+11. Grants the service user passwordless sudo for the bundled update wrapper only.
+12. Enables and starts `fabricator.service`.
 
 ## Update an existing install
 
@@ -57,6 +58,9 @@ During update, Fabricator backs up important state under `/var/lib/fabricator/up
 | `/var/lib/fabricator/servers.json` | Server index. |
 | `/var/lib/fabricator/java` | Managed Java runtimes. |
 | `/var/lib/fabricator/backups` | Default backup root. |
+| `/var/lib/fabricator/playit` | playit.gg runtime directory for the saved secret, socket, PID file, logs, and enabled-state marker. |
+| `/usr/local/bin/playit` | Optional playit daemon installed by the Fabricator installer when supported and checksum-verified. |
+| `/usr/local/bin/playit-cli` | Optional playit CLI used for the headless account claim flow. |
 | `/etc/fabricator/fabricator.env` | Environment configuration loaded by systemd. |
 | `/etc/systemd/system/fabricator.service` | Systemd unit. |
 | `/etc/sudoers.d/fabricator-self-update` | Limited sudo rule for dashboard self-update. |
