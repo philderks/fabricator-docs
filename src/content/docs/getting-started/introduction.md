@@ -25,6 +25,7 @@ Mod and modpack discovery uses the [Modrinth API](https://docs.modrinth.com/). J
 - **Files** — browse server files and edit UTF-8 text files while staying inside the configured server root.
 - **Backups** — create quick backups, define scheduled backup configs, download snapshots, and restore them.
 - **Settings** — edit common `server.properties` values from the UI; advanced settings are available in expert mode.
+- **playit.gg tunnels** — expose Minecraft servers without router port forwarding and show each server's public address from the dashboard.
 - **Self-update** — check GitHub Releases and trigger an in-dashboard update.
 - **CLI** — system-level commands for status, start, stop, update, version, uninstall, and help.
 
