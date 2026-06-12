@@ -20,6 +20,14 @@ export default defineConfig({
 						}
 					`,
 				},
+				{
+					tag: 'script',
+					attrs: {
+						defer: true,
+						src: 'https://umami.fabricator.site/script.js',
+						'data-website-id': '8ea04109-fc8d-4790-9de6-68985399fe79',
+					},
+				},
 			],
 			social: [
 				{ icon: 'github', label: 'GitHub', href: 'https://github.com/philderks/Fabricator' },
