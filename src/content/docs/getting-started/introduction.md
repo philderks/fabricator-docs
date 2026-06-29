@@ -3,7 +3,7 @@ title: Introduction
 description: What Fabricator is, what it does, and when to use it.
 ---
 
-Fabricator is a self-hosted dashboard for Minecraft server operators. It runs as a Linux systemd service and provides a browser UI for creating, starting, stopping, configuring, backing up, and maintaining multiple Minecraft server instances.
+Fabricator is a self-hosted dashboard for Minecraft server operators. It runs as a Linux systemd service or Docker container and provides a browser UI for creating, starting, stopping, configuring, backing up, and maintaining multiple Minecraft server instances.
 
 The current codebase supports these loaders through a shared installer registry:
 
@@ -18,12 +18,13 @@ Mod and modpack discovery uses the [Modrinth API](https://docs.modrinth.com/). J
 ## Core features
 
 - **Multi-server dashboard** — switch between any server stored in Fabricator's server index.
-- **Server lifecycle** — install, start, stop, restart, and inspect runtime state.
+- **Built-in operator login** — first-boot setup, login/logout, password changes, and optional reverse-proxy auth delegation.
+- **Server lifecycle** — install, start, stop, restart, inspect runtime state, and choose per-server auto-start behavior.
 - **Console** — read recent stdout/stderr and send commands to a running server.
 - **Modrinth integration** — search mods and modpacks, resolve compatible versions, install dependencies, and remove installed JARs.
 - **Players** — view known/online players and manage whitelist, ops, bans, IP bans, and kicks.
 - **Files** — browse server files and edit UTF-8 text files while staying inside the configured server root.
-- **Backups** — create quick backups, define scheduled backup configs, download snapshots, and restore them.
+- **Backups and world import** — create quick backups, define scheduled backup configs, download snapshots, restore them, and import world archives with a mandatory safety snapshot.
 - **Settings** — edit common `server.properties` values from the UI; advanced settings are available in expert mode.
 - **playit.gg tunnels** — expose Minecraft servers without router port forwarding and show each server's public address from the dashboard.
 - **Self-update** — check GitHub Releases and trigger an in-dashboard update.
@@ -43,7 +44,7 @@ A production install stores application files in `/opt/fabricator/app`, virtuale
 
 Use Fabricator if you:
 
-- Run Minecraft servers on a VPS, dedicated Linux box, or home server.
+- Run Minecraft servers on a VPS, dedicated Linux box, home server, or Docker-capable host.
 - Prefer a web UI over routine SSH file edits.
 - Want Modrinth search/install and server backups in one tool.
 - Need to manage several server instances from one dashboard.

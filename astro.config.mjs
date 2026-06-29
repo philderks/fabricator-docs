@@ -39,6 +39,8 @@ export default defineConfig({
 					items: [
 						{ label: 'Introduction', slug: 'getting-started/introduction' },
 						{ label: 'Installation', slug: 'getting-started/installation' },
+						{ label: 'Docker', slug: 'getting-started/docker' },
+						{ label: 'Authentication', slug: 'getting-started/authentication' },
 						{ label: 'System Requirements', slug: 'getting-started/requirements' },
 						{ label: 'Reverse Proxy', slug: 'getting-started/reverse-proxy' },
 					],

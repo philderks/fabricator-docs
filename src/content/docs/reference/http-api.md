@@ -5,6 +5,16 @@ description: High-level map of Fabricator's backend API endpoints.
 
 Fabricator's dashboard talks to a Flask API mounted under `/api`. This page is a practical map for contributors and operators; endpoint details may evolve with the UI.
 
+## Auth
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| `GET` | `/api/auth/status` | Return whether auth is enabled, whether setup is needed, and whether the current session is authenticated. |
+| `POST` | `/api/auth/setup` | One-time first-boot password setup. JSON only; requires at least 8 characters. |
+| `POST` | `/api/auth/login` | Authenticate with the operator password and create a session. |
+| `POST` | `/api/auth/logout` | Clear the current authenticated session. |
+| `POST` | `/api/auth/change-password` | Change the operator password when it is not env-managed. |
+
 ## Health and update
 
 | Method | Path | Purpose |
@@ -30,6 +40,7 @@ Fabricator's dashboard talks to a Flask API mounted under `/api`. This page is a
 | `POST` | `/api/servers` | Create a server record. |
 | `GET` | `/api/servers/<server_id>` | Get one server with runtime augmentation. |
 | `PUT` | `/api/servers/<server_id>/settings` | Update settings and write `server.properties`. |
+| `PUT` | `/api/servers/<server_id>/autostart` | Update per-server auto-start behavior. |
 | `DELETE` | `/api/servers/<server_id>` | Delete a server record and optionally files. |
 | `POST` | `/api/servers/<server_id>/install` | Start async server install. |
 | `GET` | `/api/servers/<server_id>/install/progress` | Poll install progress. |
@@ -97,7 +108,8 @@ Fabricator's dashboard talks to a Flask API mounted under `/api`. This page is a
 | `DELETE` | `/api/servers/<server_id>/snapshots/<snapshot_id>` | Delete snapshot record/archive. |
 | `GET` | `/api/servers/<server_id>/snapshots/<snapshot_id>/download` | Download snapshot as tar or zip. |
 | `POST` | `/api/servers/<server_id>/snapshots/<snapshot_id>/restore` | Start restore job. |
-| `GET` | `/api/backup-jobs/<job_id>` | Poll backup/restore job. |
+| `POST` | `/api/servers/<server_id>/world-import` | Upload a world archive and start a world-import job. |
+| `GET` | `/api/backup-jobs/<job_id>` | Poll backup/restore/world-import job. |
 
 ## Java, metrics, and loaders
 
@@ -107,6 +119,8 @@ Fabricator's dashboard talks to a Flask API mounted under `/api`. This page is a
 | `POST` | `/api/java/install` | Start managed Java install. |
 | `GET` | `/api/java/install/progress/<task_id>` | Poll Java install progress. |
 | `DELETE` | `/api/java/install/<task_id>` | Cancel Java install task. |
+| `GET` | `/api/java/installed` | List managed Java runtimes installed on disk. |
+| `DELETE` | `/api/java/installed/<major>` | Delete an installed managed Java major version. |
 | `GET` | `/api/metrics/system` | Host-level CPU/RAM metrics when available. |
 | `GET` | `/api/servers/<server_id>/metrics` | Per-server runtime metrics when available. |
 | `GET` | `/api/loaders/<loader>/versions/game` | Supported Minecraft versions for a loader. |

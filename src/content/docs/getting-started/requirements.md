@@ -5,7 +5,7 @@ description: What you need before installing Fabricator.
 
 ## Operating system
 
-Fabricator is Linux-first and the installer requires **systemd**. The supported installer families are:
+Fabricator has two supported deployment paths: Docker on any Docker-capable host, or the native Linux installer on a systemd server. The native installer supports these distro families:
 
 | Distro family | Package manager | Examples |
 | --- | --- | --- |
@@ -13,24 +13,24 @@ Fabricator is Linux-first and the installer requires **systemd**. The supported 
 | Arch | `pacman` | Arch, EndeavourOS, Garuda, Manjaro |
 | Fedora / RHEL | `dnf` | Fedora, RHEL, CentOS, Rocky, AlmaLinux |
 
-Other distros may work manually, but the official installer exits on unknown families.
+Other distros may work manually, but the official native installer exits on unknown families. On macOS and Windows, use Docker Desktop / WSL2 rather than the native installer.
 
 ## Host access
 
 You need:
 
-- Root or `sudo` access.
-- `curl` and `systemctl` available before running the installer.
+- Docker Engine / Docker Desktop for the container install, or root/`sudo` plus `curl` and `systemctl` for the native installer.
 - Outbound HTTPS access to GitHub Releases, PyPI, Modrinth, and Adoptium.
 
-The installer creates a system user named `fabricator`, a systemd unit, `/etc/fabricator/fabricator.env`, and `/var/lib/fabricator`.
+The native installer creates a system user named `fabricator`, a systemd unit, `/etc/fabricator/fabricator.env`, and `/var/lib/fabricator`. The Docker image uses a non-root container user and persists data under `/data`.
 
 ## Runtime requirements
 
 | Component | Requirement |
 | --- | --- |
-| Python | Python 3.10+ at minimum; the package metadata targets Python 3.11+. |
-| Node.js | Not required at runtime for release tarballs; required for frontend builds from source. |
+| Docker | Docker Engine or Docker Desktop for the recommended container install. |
+| Python | Python 3.10+ at minimum for native/manual installs; the container uses Python 3.11. |
+| Node.js | Not required at runtime for release tarballs or the Docker image; required for frontend builds from source. |
 | Java | Managed per server by Fabricator. A global Java install is optional. |
 | RAM | Fabricator itself is lightweight; size the host for your Minecraft servers. |
 | Disk | Plan for worlds, mods, backups, and managed Java runtimes under `/var/lib/fabricator`. |
