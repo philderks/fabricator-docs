@@ -26,9 +26,9 @@ The packaged installer downloads pinned playit-agent binaries for supported Linu
 
 After the claim succeeds, Fabricator starts the playit agent and keeps polling for tunnel status. The enabled state is persisted, so a tunnel enabled from the dashboard starts again after a Fabricator service restart.
 
-:::note
+<Callout title="Shared agent" type="info">
 The playit.gg controls manage one shared agent for all servers on the Fabricator host. Disabling or resetting playit.gg from any server's tab affects every server that depends on that agent.
-:::
+</Callout>
 
 ## Create a tunnel for a server
 

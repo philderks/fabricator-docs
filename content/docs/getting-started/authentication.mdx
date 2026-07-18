@@ -11,9 +11,9 @@ On first boot, when no credential exists yet, Fabricator enters setup mode and r
 
 The first password must be at least 8 characters. After setup, the browser session is logged in automatically.
 
-:::caution[Trust-on-first-use]
+<Callout title="Trust-on-first-use" type="warning">
 The setup page is reachable by anyone who can reach the dashboard until the password is set. If Fabricator is exposed on an untrusted network before you can complete setup, configure `FABRICATOR_AUTH_PASSWORD_HASH` before first start instead.
-:::
+</Callout>
 
 ## Stored credentials and session key
 
