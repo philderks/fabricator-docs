@@ -1,11 +1,11 @@
 {
   "name": "Fabricator Docs",
   "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
-  "forwardPorts": [4321],
+  "forwardPorts": [3000],
   "postCreateCommand": "npm install",
   "customizations": {
     "vscode": {
-      "extensions": ["astro-build.astro-vscode"]
+      "extensions": ["dbaeumer.vscode-eslint", "bradlc.vscode-tailwindcss"]
     }
   }
 }

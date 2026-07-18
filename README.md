@@ -1,6 +1,6 @@
 # Fabricator Docs
 
-Documentation site for [Fabricator](https://github.com/philderks/Fabricator), built with [Astro Starlight](https://starlight.astro.build/).
+Documentation site for [Fabricator](https://github.com/philderks/Fabricator), built with [Fumadocs](https://fumadocs.dev/) and Next.js.
 
 ## Local development
 
@@ -9,12 +9,17 @@ npm install
 npm run dev
 ```
 
-The dev server starts at `http://localhost:4321`.
+The development server starts at `http://localhost:3000`.
 
-## Build
+## Quality checks
 
 ```bash
+npm test
+npm run lint
+npm run types:check
 npm run build
 ```
 
-Documentation pages live in `src/content/docs/`. The sidebar is configured in `astro.config.mjs`.
+The production build is a static export written to `out/`. Run `npm run preview` after building to serve it locally.
+
+Documentation pages live in `content/docs/`. Sidebar order is configured in `content/docs/meta.json`; the application shell and Fumadocs integration live under `src/app/`.
