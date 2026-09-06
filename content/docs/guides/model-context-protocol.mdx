@@ -1,0 +1,107 @@
+---
+title: Model Context Protocol (MCP)
+description: Connect an AI client to Fabricator with scoped API access.
+---
+
+Fabricator can connect to an MCP client, such as Claude Desktop, so the client can inspect a Minecraft server through Fabricator's HTTP API. The integration is intended primarily for diagnosing modpack crashes: an assistant can read logs, inspect installed mods, check Modrinth compatibility, and—when explicitly allowed—perform a small set of server-management actions.
+
+## How the integration is delivered
+
+There are two separate components:
+
+1. **Fabricator's built-in MCP integration** is included with the normal Fabricator installation. It provides the switch and API-token management under **Settings** → **Model Context Protocol**.
+2. **`fabricator-mcp`** is a separate MCP server process that runs on the same machine as your MCP client. It connects back to the Fabricator panel over HTTP.
+
+Enabling MCP access in Fabricator does **not** download or start the separate MCP server. It only permits token-based access to the panel. The MCP client starts the separate server when it loads the configuration; on its first run, `uvx` downloads and prepares the package.
+
+## Before you start
+
+You need:
+
+- A Fabricator panel reachable from the computer running your MCP client.
+- [`uv`](https://docs.astral.sh/uv/) installed and available on that computer's `PATH`.
+- Access to **Settings** → **Model Context Protocol** in Fabricator.
+
+<Callout title="The MCP server is local to the client" type="info">
+If Claude Desktop runs on your laptop while Fabricator runs on a home server, install `uv` on the laptop—not necessarily on the Fabricator host. The laptop must be able to reach Fabricator's URL.
+</Callout>
+
+## Enable MCP access and create a token
+
+1. In Fabricator, open **Settings** → **Model Context Protocol**.
+2. Turn on **MCP access**.
+3. Create a token.
+4. Choose the narrowest scope that fits the task:
+   - **`read`** is the recommended default. It can inspect server status, logs, installed mods, Modrinth data, runtime diagnostics, and backup metadata, but cannot modify a server.
+   - **`manage`** additionally allows starting, stopping, or restarting a server; retrying its saved installation; installing or updating a Modrinth mod; and removing an installed mod JAR.
+5. Copy the generated client configuration. The full token is shown only when it is created.
+
+Turning MCP access off immediately prevents all existing MCP tokens from working. It does not delete them, so you can re-enable access later. Revoke tokens you no longer use from the same settings page.
+
+## Configure an MCP client
+
+Fabricator generates a ready-to-paste configuration block with your panel URL and token. Add it to your MCP client's server configuration. For example, a Claude Desktop configuration uses this shape:
+
+```json
+{
+  "mcpServers": {
+    "fabricator": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/philderks/Fabricator@dev#subdirectory=mcp",
+        "fabricator-mcp"
+      ],
+      "env": {
+        "FABRICATOR_URL": "https://fabricator.example.com",
+        "FABRICATOR_TOKEN": "YOUR_TOKEN_HERE"
+      }
+    }
+  }
+}
+```
+
+Restart the MCP client after saving its configuration. It starts `fabricator-mcp` locally; the first launch may take longer while `uvx` downloads its dependencies.
+
+If the panel is on the same machine as the client, `http://127.0.0.1:5000` is the default URL. Otherwise, use the panel's reachable HTTPS URL. Do not expose an unauthenticated Fabricator panel directly to the public internet; use authentication and a reverse proxy where appropriate.
+
+## What an assistant can access
+
+The Fabricator panel enforces the token scope. The MCP package is only a curated interface; it is not a security boundary.
+
+| Capability | `read` | `manage` |
+| --- | :---: | :---: |
+| Server status, resource use, logs, crash diagnostics | Yes | Yes |
+| Installed mods and Modrinth compatibility data | Yes | Yes |
+| Java/runtime and installation diagnostics | Yes | Yes |
+| Backup coverage, schedules, and snapshot metadata | Yes | Yes |
+| Start, stop, or restart a server | No | Yes |
+| Retry a server installation | No | Yes |
+| Install, update, or remove a supported mod | No | Yes |
+
+MCP tokens cannot access console input, arbitrary server files, server settings, server creation or deletion, Java installation, Fabricator updates, backup creation or restore, world import, or player administration.
+
+## Security notes
+
+- Treat the MCP token like a password. It is stored as plain text in the MCP client's configuration file.
+- Server logs can contain text written by mods, players, chat messages, nicknames, and the MOTD. Prefer a `read` token unless you specifically want the assistant to make changes.
+- A `manage` token lets an assistant act on the information it reads. Only grant it to a client and assistant workflow you trust.
+- Keep Fabricator behind appropriate network controls. The MCP client sends the token to the panel over HTTP; use HTTPS whenever the traffic leaves the local machine.
+
+## Troubleshooting
+
+### The MCP server fails to launch or disconnects immediately
+
+The usual cause is that `uv` is unavailable on the machine running the MCP client. Install `uv`, ensure `uvx` is on `PATH`, then restart the client.
+
+### The client cannot reach Fabricator
+
+Check that `FABRICATOR_URL` is the URL reachable from the MCP-client machine. `127.0.0.1` refers to that machine, not to a separate Fabricator host. Also check firewall rules, reverse-proxy routing, and TLS certificate trust.
+
+### Token authentication fails
+
+Confirm that MCP access is enabled in Fabricator, the token was copied in full, and the token has not been revoked. Creating a new token is the safest way to replace a token you can no longer verify.
+
+### MCP access was disabled
+
+Existing tokens remain stored but stop working immediately. Turn MCP access back on in **Settings** → **Model Context Protocol** to use them again.

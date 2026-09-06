@@ -16,6 +16,7 @@
     "guides/files",
     "guides/backups",
     "guides/playit",
+    "guides/model-context-protocol",
     "guides/server-settings",
     "guides/updating",
     "---Configuration---",

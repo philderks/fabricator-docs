@@ -34,7 +34,7 @@ assert.equal(existsSync('src/content.config.ts'), false, 'Astro content config m
 const oldDocs = globSync('src/content/docs/**/*.{md,mdx}');
 const newDocs = globSync('content/docs/**/*.{md,mdx}');
 assert.equal(oldDocs.length, 0, 'Astro content directory must be retired');
-assert.equal(newDocs.length, 38, 'all 38 documentation pages must be preserved');
+assert.ok(newDocs.length >= 38, 'all 38 original documentation pages must be preserved');
 
 const content = newDocs.map((file) => readFileSync(file, 'utf8')).join('\n');
 assert.doesNotMatch(content, /^template:\s+splash$/m, 'Starlight splash metadata must be removed');
