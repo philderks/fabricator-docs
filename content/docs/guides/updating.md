@@ -34,7 +34,9 @@ The CLI reads `/opt/fabricator/app/.fabricator_version` and checks local API rea
 
 ## Update Minecraft or loader versions
 
-Changing the Minecraft version or loader for an existing server is not currently a one-click in-place upgrade. The server settings page treats **Running Version** and **Mod Loader** as read-only and notes that changes require reinstall.
+Vanilla and Paper servers can be upgraded in the properties tab. The jar is kept as a rollback.
+
+Changing the Minecraft version for other loaders for an existing server is not currently a one-click in-place upgrade. The server settings page treats **Running Version** and **Mod Loader** as read-only and notes that changes require reinstall.
 
 Safer workflow:
 
@@ -46,11 +48,13 @@ Safer workflow:
 
 ## Update mods
 
-Fabricator can install and remove mods, but automatic bulk mod updates are not the same as Minecraft server upgrades. Before changing a mod set:
+Fabricator can update all mods from the Mod tab. It will show what mods it will update and what version its changing to. The updater will keep the old jars until the updated jar is downloaded.
+
+If you want to completely change out mods:
 
 1. Stop the server.
 2. Create a backup.
-3. Install/remove mods from the Mods page.
+3. Install/remove mods from the Mods tab.
 4. Start the server and inspect Console logs.
 5. If startup fails, remove the last changed mod or restore the backup.
 

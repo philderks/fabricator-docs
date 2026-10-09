@@ -21,6 +21,10 @@ Directory listings include:
 
 Directories are sorted before files.
 
+## Uploading files
+
+Fabricator allows you to upload files directly from the web panel. Once you upload a progress bar appears with the upload status. At this stage you can also cancel the upload. When the upload is completed the bar will disapear and the file will appear.
+
 ## Reading and editing files
 
 Fabricator can read and write UTF-8 text files. Binary or non-UTF-8 files are rejected for text reads. Writes require the server lock, so Fabricator will not edit a file while another mutating operation is active.
