@@ -63,11 +63,18 @@ If you are locked out, stop Fabricator, delete `auth.json`, and start it again. 
 
 ## Disabling built-in auth
 
-Disable auth only if another trusted layer protects Fabricator, such as reverse-proxy SSO, VPN-only access, or a private firewall:
+Disable auth only if another trusted layer protects Fabricator, such as reverse-proxy SSO, VPN-only access, or a private firewall.
 
+**Option 1: Use an environment variable**
 ```ini
 FABRICATOR_DISABLE_AUTH=1
 ```
+
+**Option 2: Use the dashboard settings**
+
+Disable the password in settings by going to **Settings > Security**.
+
+### Disabling auth for HTTPS
 
 For browser access through HTTPS, set the session cookie's `Secure` flag:
 

@@ -8,8 +8,12 @@ Fabricator is a self-hosted dashboard for Minecraft server operators. It runs as
 The current codebase supports these loaders through a shared installer registry:
 
 - Fabric
+- Folia
 - Forge
 - NeoForge
+- Paper
+- Pufferfish
+- Purper
 - Quilt
 - Vanilla
 
@@ -23,7 +27,7 @@ Mod and modpack discovery uses the [Modrinth API](https://docs.modrinth.com/). J
 - **Console** — read recent stdout/stderr and send commands to a running server.
 - **Modrinth integration** — search mods and modpacks, resolve compatible versions, install dependencies, and remove installed JARs.
 - **Players** — view known/online players and manage whitelist, ops, bans, IP bans, and kicks.
-- **Files** — browse server files and edit UTF-8 text files while staying inside the configured server root.
+- **Files** — upload, browse and delete server files and edit UTF-8 text files while staying inside the configured server root.
 - **Backups and world import** — create quick backups, define scheduled backup configs, download snapshots, restore them, and import world archives with a mandatory safety snapshot.
 - **Settings** — edit common `server.properties` values from the UI; advanced settings are available in expert mode.
 - **playit.gg tunnels** — expose Minecraft servers without router port forwarding and show each server's public address from the dashboard.
