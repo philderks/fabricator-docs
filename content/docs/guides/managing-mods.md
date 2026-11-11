@@ -12,7 +12,8 @@ The Mods page lists JAR files from the server's `mods/` directory. Fabricator en
 You can:
 
 - Search within installed mods.
-- Remove one mod.
+- Remove mods.
+- Temporarily Disable mods.
 - Select several mods and bulk delete them.
 - Open the Modrinth browser to install new mods.
 - Open the modpack browser to import a compatible modpack.

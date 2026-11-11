@@ -25,6 +25,7 @@ Mod and modpack discovery uses the [Modrinth API](https://docs.modrinth.com/). J
 - **Built-in operator login** — first-boot setup, login/logout, password changes, and optional reverse-proxy auth delegation.
 - **Server lifecycle** — install, start, stop, restart, inspect runtime state, and choose per-server auto-start behavior.
 - **Console** — read recent stdout/stderr and send commands to a running server.
+- **Scheduled commands** — Schedual commands to run daily or use a custom cron expression.
 - **Modrinth integration** — search mods and modpacks, resolve compatible versions, install dependencies, and remove installed JARs.
 - **Players** — view known/online players and manage whitelist, ops, bans, IP bans, and kicks.
 - **Files** — upload, browse and delete server files and edit UTF-8 text files while staying inside the configured server root.

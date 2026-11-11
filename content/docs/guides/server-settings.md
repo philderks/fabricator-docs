@@ -27,7 +27,7 @@ Changing either requires a reinstall/new server workflow rather than a settings 
 
 | Group | Examples |
 | --- | --- |
-| Server identity | name, MOTD, bug report URL, port, bind address, max players |
+| Server identity | name, MOTD, server icon, bug report URL, port, bind address, max players |
 | Gameplay | difficulty, gamemode, hardcore, PVP, flight, command blocks |
 | World generation | level name, level type, seed, generator settings, structures |
 | Performance | view distance, simulation distance, max tick time, compression threshold |
